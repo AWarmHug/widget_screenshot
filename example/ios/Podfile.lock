@@ -5,14 +5,14 @@ PODS:
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - widget_shot (0.0.1):
+  - widget_screenshot (0.0.1):
     - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - image_gallery_saver (from `.symlinks/plugins/image_gallery_saver/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/ios`)
-  - widget_shot (from `.symlinks/plugins/widget_shot/ios`)
+  - widget_screenshot (from `.symlinks/plugins/widget_screenshot/ios`)
 
 EXTERNAL SOURCES:
   Flutter:
@@ -21,14 +21,14 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/image_gallery_saver/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/ios"
-  widget_shot:
-    :path: ".symlinks/plugins/widget_shot/ios"
+  widget_screenshot:
+    :path: ".symlinks/plugins/widget_screenshot/ios"
 
 SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   image_gallery_saver: 259eab68fb271cfd57d599904f7acdc7832e7ef2
   path_provider_foundation: eaf5b3e458fc0e5fbb9940fb09980e853fe058b8
-  widget_shot: 67cb614e73710714008fe3e8e58fbbd7aa60bfd9
+  widget_screenshot: d0bf67809b08976e8ba89162fc6a0dbff922050c
 
 PODFILE CHECKSUM: ef19549a9bc3046e7bb7d2fab4d021637c0c58a3
 

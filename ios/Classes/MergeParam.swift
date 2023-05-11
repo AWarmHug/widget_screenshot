@@ -9,7 +9,7 @@ import Flutter
 import Foundation
 
 struct MergeParam {
-    var color: String
+    var color: UIColor
     var width: Double
     var height: Double
     var format: Int

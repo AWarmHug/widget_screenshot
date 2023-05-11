@@ -2,7 +2,7 @@
 
 Widget截屏，支持长截图，如：ListView  
 
-Screenshot for widget，support long screenshot like ListView
+Screenshot for widget，support long screenshot like ListView, support `backgroundColor` `format` `quality`.
 
 ## Usage like `RepaintBoundary`
 

@@ -10,6 +10,8 @@ import 'package:flutter/rendering.dart';
 import 'src/image_merger.dart';
 import 'src/merge_param.dart';
 
+enum ShotFormat { png, jpeg }
+
 class WidgetShot extends SingleChildRenderObjectWidget {
   const WidgetShot({super.key, super.child});
 
@@ -22,13 +24,24 @@ class WidgetShotRenderRepaintBoundary extends RenderRepaintBoundary {
 
   /// [scrollController] is child's scrollController, if child is [ScrollView]
   /// The resultImage's [pixelRatio] default [ window.devicePixelRatio]
+  /// some child has no background, [backgroundColor] to set backgroundColor default [Colors.white
+  /// set format by [format] support png or jpeg
+  /// set [quality] 0~100, if [format] is png, [quality] is useless
   Future<Uint8List?> screenshot({
     ScrollController? scrollController,
     int maxHeight = 10000,
     double? pixelRatio,
+    Color backgroundColor = Colors.white,
+    ShotFormat format = ShotFormat.png,
+    int quality = 100,
   }) async {
     pixelRatio ??= window.devicePixelRatio;
-
+    if (quality > 100) {
+      quality = 100;
+    }
+    if (quality < 0) {
+      quality = 10;
+    }
     Uint8List? resultImage;
 
     if (scrollController != null && (scrollController.position.maxScrollExtent) > 0) {
@@ -109,7 +122,10 @@ class WidgetShotRenderRepaintBoundary extends RenderRepaintBoundary {
       }
 
       final mergeParam = MergeParam(
+        color: backgroundColor,
         size: Size(size.width * pixelRatio, imageHeight),
+        format: format == ShotFormat.png ? MergeParam.formatPng : MergeParam.formatJPEG,
+        quality: quality,
         imageParams: imageParams,
       );
 

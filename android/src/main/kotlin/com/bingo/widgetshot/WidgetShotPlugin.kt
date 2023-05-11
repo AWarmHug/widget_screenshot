@@ -21,7 +21,7 @@ class WidgetShotPlugin: FlutterPlugin, MethodCallHandler {
     if (call.method == "merge") {
       val arguments = call.arguments as Map<String, Any>
       val merger = Merger(arguments)
-      result.success(merger.mergeToMemory())
+      result.success(merger.merge())
     } else {
       result.notImplemented()
     }

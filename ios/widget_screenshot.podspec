@@ -3,7 +3,7 @@
 # Run `pod lib lint widget_shot.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'widget_shot'
+  s.name             = 'widget_screenshot'
   s.version          = '0.0.1'
   s.summary          = 'widget screenshot'
   s.description      = <<-DESC

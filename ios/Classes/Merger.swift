@@ -14,8 +14,7 @@ class Merger {
 
     var mergeParam: MergeParam
     init(param: [String: Any]) {
-        let color = param["color"] as! String
-
+        let color = param["color"] as! [Int]
         let width = (param["width"] as! NSNumber).doubleValue
         let height = (param["height"] as! NSNumber).doubleValue
         let format = (param["format"] as! NSNumber).intValue
@@ -31,13 +30,16 @@ class Merger {
             return ImageParam(image: image, dx: dx, dy: dy, width: width, height: height)
         }
 
-        self.mergeParam = MergeParam(color: color, width: width, height: height, format: format, quality: quality, imageParams: imageParams)
+        self.mergeParam = MergeParam(color: UIColor(red: CGFloat(color[1])/255.0, green:  CGFloat(color[2])/255.0, blue:  CGFloat(color[3])/255.0, alpha:  CGFloat(color[0])/255.0), width: width, height: height, format: format, quality: quality, imageParams: imageParams)
     }
 
-    func mergeToMemory() -> FlutterStandardTypedData? {
+    func merge() -> FlutterStandardTypedData? {
         let size = CGSizeMake(mergeParam.width, mergeParam.height)
 
         UIGraphicsBeginImageContext(size)
+        let context = UIGraphicsGetCurrentContext()
+        context?.setFillColor(mergeParam.color.cgColor)
+        context?.fill(CGRect(origin: CGPoint(x: 0, y: 0), size: size))
 
         mergeParam.imageParams.forEach { it in
             UIImage(data: it.image)?.draw(in: CGRect(x: it.dx, y: it.dy, width: it.width, height: it.height))

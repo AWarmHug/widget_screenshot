@@ -48,7 +48,12 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () async {
                 WidgetShotRenderRepaintBoundary repaintBoundary =
                     _shotKey.currentContext!.findRenderObject() as WidgetShotRenderRepaintBoundary;
-                var resultImage = await repaintBoundary.screenshot(scrollController: _scrollController,pixelRatio: 1);
+                var resultImage = await repaintBoundary.screenshot(
+                    scrollController: _scrollController,
+                    backgroundColor: Colors.blue,
+                    format: ShotFormat.png,
+                    quality: 10,
+                    pixelRatio: 1);
 
                 try {
                   // Map<dynamic, dynamic> result =
@@ -82,8 +87,8 @@ class _MyHomePageState extends State<MyHomePage> {
             controller: _scrollController,
             itemBuilder: (context, index) {
               return Container(
-                color: Color.fromARGB(
-                    Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), Random().nextInt(255)),
+                // color: Color.fromARGB(
+                //     Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), Random().nextInt(255)),
                 height: 160,
                 child: Center(
                   child: Text(

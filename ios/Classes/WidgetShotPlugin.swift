@@ -12,7 +12,7 @@ public class WidgetShotPlugin: NSObject, FlutterPlugin {
         if call.method == "merge" {
             let arguments = call.arguments
             if arguments != nil {
-                result(Merger(param: arguments! as! [String : Any]).mergeToMemory())
+                result(Merger(param: arguments! as! [String : Any]).merge())
             } else {
                 result(nil)
             }

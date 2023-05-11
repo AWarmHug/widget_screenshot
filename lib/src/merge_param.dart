@@ -22,7 +22,7 @@ class MergeParam {
 
   Map<String, dynamic> toJson() {
     var map = <String, dynamic>{};
-    map["color"] = color.toHex();
+    map["color"] =[color.alpha,color.red,color.green,color.blue];
     map["width"] = size.width;
     map["height"] = size.height;
     map["format"] = format;
