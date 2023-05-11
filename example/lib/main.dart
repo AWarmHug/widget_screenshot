@@ -27,8 +27,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
-
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
 
@@ -51,10 +49,8 @@ class _MyHomePageState extends State<MyHomePage> {
           TextButton(
               onPressed: () async {
                 WidgetShotRenderRepaintBoundary repaintBoundary =
-                _shotKey.currentContext!.findRenderObject()
-                as WidgetShotRenderRepaintBoundary;
-                var resultImage = await repaintBoundary.screenshot(
-                    scrollController: _scrollController);
+                    _shotKey.currentContext!.findRenderObject() as WidgetShotRenderRepaintBoundary;
+                var resultImage = await repaintBoundary.screenshot(scrollController: _scrollController);
 
                 try {
                   // Map<dynamic, dynamic> result =
@@ -89,10 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
             itemBuilder: (context, index) {
               return Container(
                 color: Color.fromARGB(
-                    Random().nextInt(255),
-                    Random().nextInt(255),
-                    Random().nextInt(255),
-                    Random().nextInt(255)),
+                    Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), Random().nextInt(255)),
                 height: 160,
                 child: Center(
                   child: Text(

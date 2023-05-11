@@ -14,25 +14,22 @@ class WidgetShot extends SingleChildRenderObjectWidget {
   const WidgetShot({super.key, super.child});
 
   @override
-  RenderObject createRenderObject(BuildContext context) =>
-      WidgetShotRenderRepaintBoundary();
+  RenderObject createRenderObject(BuildContext context) => WidgetShotRenderRepaintBoundary();
 }
 
 class WidgetShotRenderRepaintBoundary extends RenderRepaintBoundary {
   WidgetShotRenderRepaintBoundary();
 
-  Future<Uint8List?> screenshot(
-      {ScrollController? scrollController,
-      int maxHeight = 10000,
-      bool animate = false,
-      double? pixelRatio,
-      bool resetOffset = false}) async {
+  Future<Uint8List?> screenshot({
+    ScrollController? scrollController,
+    int maxHeight = 10000,
+    double? pixelRatio,
+  }) async {
     pixelRatio ??= window.devicePixelRatio;
 
     Uint8List? resultImage;
 
-    if (scrollController != null &&
-        (scrollController.position.maxScrollExtent) > 0) {
+    if (scrollController != null && (scrollController.position.maxScrollExtent) > 0) {
       double scrollOffset = scrollController.offset;
 
       List<ImageParam> imageParams = [];
@@ -76,40 +73,23 @@ class WidgetShotRenderRepaintBoundary extends RenderRepaintBoundary {
           double scrollHeight = scrollController.offset + sHeight / 10;
 
           if (scrollHeight > scrollController.position.maxScrollExtent) {
-            lastImageHeight = scrollController.position.maxScrollExtent +
-                sHeight -
-                sHeight * i;
+            lastImageHeight = scrollController.position.maxScrollExtent + sHeight - sHeight * i;
 
-            if (!animate) {
-              scrollController
-                  .jumpTo(scrollController.position.maxScrollExtent);
-              await Future.delayed(const Duration(milliseconds: 25));
-            } else {
-              await scrollController.animateTo(
-                  scrollController.position.maxScrollExtent,
-                  duration: const Duration(milliseconds: 200),
-                  curve: Curves.linear);
-            }
+            scrollController.jumpTo(scrollController.position.maxScrollExtent);
+            await Future.delayed(const Duration(milliseconds: 25));
 
-            Uint8List lastimage = await _screenshot(pixelRatio);
+            Uint8List lastImage = await _screenshot(pixelRatio);
 
             imageParams.add(ImageParam(
-              image: lastimage,
-              offset: Offset(0,
-                  imageHeight - ((size.height - lastImageHeight) * pixelRatio)),
+              image: lastImage,
+              offset: Offset(0, imageHeight - ((size.height - lastImageHeight) * pixelRatio)),
               size: size * pixelRatio,
             ));
 
             imageHeight += lastImageHeight * pixelRatio;
           } else if (scrollHeight > sHeight * i) {
-            if (!animate) {
-              scrollController.jumpTo(sHeight * i);
-              await Future.delayed(const Duration(milliseconds: 25));
-            } else {
-              await scrollController.animateTo(sHeight * i,
-                  duration: const Duration(milliseconds: 200),
-                  curve: Curves.linear);
-            }
+            scrollController.jumpTo(sHeight * i);
+            await Future.delayed(const Duration(milliseconds: 25));
             i++;
 
             Uint8List image = await _screenshot(pixelRatio);
@@ -121,14 +101,8 @@ class WidgetShotRenderRepaintBoundary extends RenderRepaintBoundary {
             ));
             imageHeight += sHeight * pixelRatio;
           } else {
-            if (!animate) {
-              scrollController.jumpTo(scrollHeight);
-              await Future.delayed(const Duration(milliseconds: 25));
-            } else {
-              await scrollController.animateTo(scrollHeight,
-                  duration: const Duration(milliseconds: 200),
-                  curve: Curves.linear);
-            }
+            scrollController.jumpTo(scrollHeight);
+            await Future.delayed(const Duration(milliseconds: 25));
           }
         } else {
           break;
@@ -141,10 +115,6 @@ class WidgetShotRenderRepaintBoundary extends RenderRepaintBoundary {
       );
 
       resultImage = await ImageMerger.merge(mergeParam);
-
-      if (resetOffset) {
-        scrollController.jumpTo(scrollOffset);
-      }
     } else {
       resultImage = await _screenshot(pixelRatio);
     }
@@ -154,8 +124,7 @@ class WidgetShotRenderRepaintBoundary extends RenderRepaintBoundary {
   bool canScroll(ScrollController scrollController) {
     double maxScrollExtent = scrollController.position.maxScrollExtent;
     double offset = scrollController.offset;
-    return !nearEqual(maxScrollExtent, offset,
-        scrollController.position.physics.tolerance.distance);
+    return !nearEqual(maxScrollExtent, offset, scrollController.position.physics.tolerance.distance);
   }
 
   Future<Uint8List> _screenshot(double pixelRatio) async {
