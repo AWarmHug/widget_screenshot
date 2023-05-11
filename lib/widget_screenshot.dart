@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter/rendering.dart';
 
-import 'image_merger.dart';
-import 'merge_param.dart';
+import 'src/image_merger.dart';
+import 'src/merge_param.dart';
 
 class WidgetShot extends SingleChildRenderObjectWidget {
   const WidgetShot({super.key, super.child});
@@ -20,6 +20,8 @@ class WidgetShot extends SingleChildRenderObjectWidget {
 class WidgetShotRenderRepaintBoundary extends RenderRepaintBoundary {
   WidgetShotRenderRepaintBoundary();
 
+  /// [scrollController] is child's scrollController, if child is [ScrollView]
+  /// The resultImage's [pixelRatio] default [ window.devicePixelRatio]
   Future<Uint8List?> screenshot({
     ScrollController? scrollController,
     int maxHeight = 10000,
@@ -30,10 +32,7 @@ class WidgetShotRenderRepaintBoundary extends RenderRepaintBoundary {
     Uint8List? resultImage;
 
     if (scrollController != null && (scrollController.position.maxScrollExtent) > 0) {
-      double scrollOffset = scrollController.offset;
-
       List<ImageParam> imageParams = [];
-
       int imageWidth = 0;
       double imageHeight = 0;
 

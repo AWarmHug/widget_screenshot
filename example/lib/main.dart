@@ -1,11 +1,9 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:widget_shot/widget_shot.dart';
+import 'package:widget_screenshot/widget_screenshot.dart';
 
 void main() {
   runApp(const MyApp());
@@ -50,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () async {
                 WidgetShotRenderRepaintBoundary repaintBoundary =
                     _shotKey.currentContext!.findRenderObject() as WidgetShotRenderRepaintBoundary;
-                var resultImage = await repaintBoundary.screenshot(scrollController: _scrollController);
+                var resultImage = await repaintBoundary.screenshot(scrollController: _scrollController,pixelRatio: 1);
 
                 try {
                   // Map<dynamic, dynamic> result =
@@ -101,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Colors.grey,
               );
             },
-            itemCount: 100),
+            itemCount: 30),
       ),
     );
   }

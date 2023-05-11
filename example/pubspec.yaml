@@ -19,7 +19,7 @@ dependencies:
   image_gallery_saver: ^1.7.1
   path_provider: ^2.0.15
 
-  widget_shot:
+  widget_screenshot:
     # When depending on this package from a real application you should use:
     #   widget_shot: ^x.y.z
     # See https://dart.dev/tools/pub/dependencies#version-constraints

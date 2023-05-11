@@ -1,15 +1,48 @@
-# widget_shot
+# widget_screenshot
 
-widget screenshot
+Screenshot for widget，support long screenshot like ListView  
 
-## Getting Started
+## Usage like `RepaintBoundary`
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+```dart
+WidgetShot(
+        key: _shotKey,
+        child: ListView.separated(
+            controller: _scrollController,
+            itemBuilder: (context, index) {
+              return Container(
+                color: Color.fromARGB(
+                    Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), Random().nextInt(255)),
+                height: 160,
+                child: Center(
+                  child: Text(
+                    "测试文案测试文案测试文案测试文案 ${index}",
+                    style: const TextStyle(fontSize: 32),
+                  ),
+                ),
+              );
+            },
+            separatorBuilder: (context, index) {
+              return const Divider(
+                height: 1,
+                color: Colors.grey,
+              );
+            },
+            itemCount: 30),
+      )
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```dart
+WidgetShotRenderRepaintBoundary repaintBoundary =
+    _shotKey.currentContext!.findRenderObject() as WidgetShotRenderRepaintBoundary;
+var resultImage = await repaintBoundary.screenshot(scrollController: _scrollController,pixelRatio: 1);
+```
 
+## Display
+
+<div align="center">
+<img src="./display/demo.png" width="30%" align="top">
+
+<img src="./display/long_shot.png" width="30%">
+
+</div>
