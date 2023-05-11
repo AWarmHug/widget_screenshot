@@ -1,7 +1,8 @@
 name: widget_screenshot
 description: Screenshot for widget,support long screenshot like ListView
-version: 0.0.1
-homepage: https://github.com/AWarmHug/widget_shot
+version: 0.0.2
+homepage: https://github.com/AWarmHug/widget_screenshot
+repository: https://github.com/AWarmHug/widget_screenshot
 
 environment:
   sdk: '>=2.17.0 <3.0.0'

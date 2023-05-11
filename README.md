@@ -1,8 +1,15 @@
 # widget_screenshot
 
-Screenshot for widget，support long screenshot like ListView  
+Widget截屏，支持长截图，如：ListView  
+
+Screenshot for widget，support long screenshot like ListView
 
 ## Usage like `RepaintBoundary`
+
+```yaml
+dependencies:
+  widget_screenshot:x.y.z
+```
 
 ```dart
 WidgetShot(
