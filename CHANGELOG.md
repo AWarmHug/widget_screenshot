@@ -9,3 +9,7 @@
 ## 0.0.3
 
 * support `backgroundColor` `format` `quality`
+
+## 0.0.4
+
+* 完善iOS代码

@@ -17,6 +17,6 @@ public class WidgetShotPlugin: NSObject, FlutterPlugin {
                 result(nil)
             }
         }
-        result("iOS " + UIDevice.current.systemVersion)
+        result(FlutterMethodNotImplemented)
     }
 }

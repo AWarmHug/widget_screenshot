@@ -46,7 +46,6 @@ class WidgetShotRenderRepaintBoundary extends RenderRepaintBoundary {
 
     if (scrollController != null && (scrollController.position.maxScrollExtent) > 0) {
       List<ImageParam> imageParams = [];
-      int imageWidth = 0;
       double imageHeight = 0;
 
       scrollController.jumpTo(0);

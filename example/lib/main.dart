@@ -52,7 +52,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     scrollController: _scrollController,
                     backgroundColor: Colors.blue,
                     format: ShotFormat.png,
-                    quality: 10,
                     pixelRatio: 1);
 
                 try {
@@ -104,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Colors.grey,
               );
             },
-            itemCount: 30),
+            itemCount: 100),
       ),
     );
   }

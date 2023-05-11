@@ -30,11 +30,11 @@ class Merger {
             return ImageParam(image: image, dx: dx, dy: dy, width: width, height: height)
         }
 
-        self.mergeParam = MergeParam(color: UIColor(red: CGFloat(color[1])/255.0, green:  CGFloat(color[2])/255.0, blue:  CGFloat(color[3])/255.0, alpha:  CGFloat(color[0])/255.0), width: width, height: height, format: format, quality: quality, imageParams: imageParams)
+        self.mergeParam = MergeParam(color: UIColor(red: CGFloat(color[1])/255.0, green: CGFloat(color[2])/255.0, blue: CGFloat(color[3])/255.0, alpha: CGFloat(color[0])/255.0), width: width, height: height, format: format, quality: quality, imageParams: imageParams)
     }
 
     func merge() -> FlutterStandardTypedData? {
-        let size = CGSizeMake(mergeParam.width, mergeParam.height)
+        let size = CGSize(width: mergeParam.width, height: mergeParam.height)
 
         UIGraphicsBeginImageContext(size)
         let context = UIGraphicsGetCurrentContext()
@@ -45,6 +45,7 @@ class Merger {
             UIImage(data: it.image)?.draw(in: CGRect(x: it.dx, y: it.dy, width: it.width, height: it.height))
         }
         guard let image = UIGraphicsGetImageFromCurrentImageContext() else {
+            UIGraphicsEndImageContext()
             return nil
         }
 
@@ -53,7 +54,7 @@ class Merger {
         if mergeParam.format == FormatPng {
             imageData = image.pngData()
         } else {
-            imageData = image.jpegData(compressionQuality: CGFloat(Float(mergeParam.quality) / 100.0))
+            imageData = image.jpegData(compressionQuality: CGFloat(mergeParam.quality)/100.0)
         }
         UIGraphicsEndImageContext()
 

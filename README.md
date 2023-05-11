@@ -48,8 +48,8 @@ var resultImage = await repaintBoundary.screenshot(scrollController: _scrollCont
 ## Display
 
 <div align="center">
-<img src="./display/demo.png" width="30%" align="top">
+<img src="https://raw.githubusercontent.com/AWarmHug/widget_screenshot/main/display/demo.png" width="30%" align="top">
 
-<img src="./display/long_shot.png" width="30%">
+<img src="https://raw.githubusercontent.com/AWarmHug/widget_screenshot/main/display/long_shot.png" width="30%">
 
 </div>
