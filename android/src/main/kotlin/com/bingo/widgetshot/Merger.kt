@@ -7,7 +7,7 @@ class Merger(param: Map<String, Any>) {
     private val mergeParam: MergeParam
 
     init {
-        val color = (param["color"] as List<*>).map { it as Int }
+        val color = (param["color"] as List<*>?)?.map { it as Int }
         val width = param["width"] as Double
         val height = param["height"] as Double
         val format = param["format"] as Int
@@ -22,16 +22,29 @@ class Merger(param: Map<String, Any>) {
 
             return@map ImageParam(image, dx, dy, width, height)
         }
-        mergeParam = MergeParam(Color.argb(color[0],color[1],color[2],color[3]), width, height, format, quality, imageParams)
+        mergeParam = MergeParam(
+            if (color != null) Color.argb(
+                color[0],
+                color[1],
+                color[2],
+                color[3]
+            ) else null, width, height, format, quality, imageParams
+        )
     }
 
 
     fun merge(): ByteArray {
         val resultBitmap =
-            Bitmap.createBitmap(mergeParam.width.toInt(), mergeParam.height.toInt(), Bitmap.Config.ARGB_8888)
+            Bitmap.createBitmap(
+                mergeParam.width.toInt(),
+                mergeParam.height.toInt(),
+                Bitmap.Config.ARGB_8888
+            )
 
         val canvas = Canvas(resultBitmap)
-        canvas.drawColor(mergeParam.color)
+        if (mergeParam.color != null) {
+            canvas.drawColor(mergeParam.color)
+        }
         mergeParam.imageParams.forEach {
             val image = BitmapFactory.decodeByteArray(it.image, 0, it.image.size)
 

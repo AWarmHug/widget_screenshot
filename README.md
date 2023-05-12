@@ -2,9 +2,15 @@
 
 Widget截屏，支持长截图，如：ListView  
 
-Screenshot for widget，support long screenshot like ListView, support `backgroundColor` `format` `quality`.
+Screenshot for widget，support long screenshot like ListView,   
 
-## Usage like `RepaintBoundary`
+## Support 
+* backgroundColor
+* format (png, jpeg)
+* quality (0~100)
+* extraImage (like header, footer or watermark)
+
+## Usage 
 
 ```yaml
 dependencies:
@@ -12,6 +18,7 @@ dependencies:
 ```
 
 ```dart
+// Like RepaintBoundary
 WidgetShot(
         key: _shotKey,
         child: ListView.separated(
@@ -42,14 +49,17 @@ WidgetShot(
 ```dart
 WidgetShotRenderRepaintBoundary repaintBoundary =
     _shotKey.currentContext!.findRenderObject() as WidgetShotRenderRepaintBoundary;
+//
 var resultImage = await repaintBoundary.screenshot(scrollController: _scrollController,pixelRatio: 1);
 ```
 
 ## Display
 
 <div align="center">
-<img src="https://raw.githubusercontent.com/AWarmHug/widget_screenshot/main/display/demo.png" width="30%" align="top">
+<img src="https://raw.githubusercontent.com/AWarmHug/widget_screenshot/main/display/shot.webp" width="20%" align="top">
 
-<img src="https://raw.githubusercontent.com/AWarmHug/widget_screenshot/main/display/long_shot.png" width="30%">
+<img src="https://raw.githubusercontent.com/AWarmHug/widget_screenshot/main/display/shoting.gif" width="20%" align="top">
+
+<img src="https://raw.githubusercontent.com/AWarmHug/widget_screenshot/main/display/shoted.webp" width="20%" align="top">
 
 </div>

@@ -16,7 +16,8 @@ class WidgetShot extends SingleChildRenderObjectWidget {
   const WidgetShot({super.key, super.child});
 
   @override
-  RenderObject createRenderObject(BuildContext context) => WidgetShotRenderRepaintBoundary();
+  RenderObject createRenderObject(BuildContext context) =>
+      WidgetShotRenderRepaintBoundary();
 }
 
 class WidgetShotRenderRepaintBoundary extends RenderRepaintBoundary {
@@ -27,9 +28,10 @@ class WidgetShotRenderRepaintBoundary extends RenderRepaintBoundary {
   /// some child has no background, [backgroundColor] to set backgroundColor default [Colors.white
   /// set format by [format] support png or jpeg
   /// set [quality] 0~100, if [format] is png, [quality] is useless
+  /// support merge [extraImage], like header, footer or watermark
   Future<Uint8List?> screenshot({
     ScrollController? scrollController,
-    GlobalKey? scrollKey,
+    List<ImageParam> extraImage = const [],
     int maxHeight = 10000,
     double? pixelRatio,
     Color? backgroundColor,
@@ -45,26 +47,45 @@ class WidgetShotRenderRepaintBoundary extends RenderRepaintBoundary {
     }
     Uint8List? resultImage;
 
+    double sHeight =
+        scrollController?.position.viewportDimension ?? size.height;
 
-    if (scrollController != null && (scrollController.position.maxScrollExtent) > 0) {
-      List<ImageParam> imageParams = [];
-      double imageHeight = 0;
+    double imageHeight = 0;
 
+    List<ImageParam> imageParams = [];
+
+    extraImage
+        .where((element) => element.offset == const Offset(-1, -1))
+        .toList(growable: false)
+        .reversed
+        .forEach((element) {
+      imageParams.add(ImageParam(
+        image: element.image,
+        offset: Offset(0, imageHeight),
+        size: element.size,
+      ));
+      imageHeight += element.size.height;
+    });
+
+    bool canScroll = scrollController != null &&
+        (scrollController.position.maxScrollExtent) > 0;
+
+    if (canScroll) {
       scrollController.jumpTo(0);
       await Future.delayed(const Duration(milliseconds: 200));
+    }
 
-      double sHeight = scrollController.position.viewportDimension;
+    var firstImage = await _screenshot(pixelRatio);
 
-      var firstImage = await _screenshot(pixelRatio);
+    imageParams.add(ImageParam(
+      image: firstImage,
+      offset: Offset(0, imageHeight),
+      size: size * pixelRatio,
+    ));
 
-      imageParams.add(ImageParam(
-        image: firstImage,
-        offset: Offset(0, imageHeight),
-        rect: size * pixelRatio,
-      ));
+    imageHeight += sHeight * pixelRatio;
 
-      imageHeight += sHeight * pixelRatio;
-
+    if (canScroll) {
       assert(() {
         scrollController.addListener(() {
           debugPrint(
@@ -79,30 +100,32 @@ class WidgetShotRenderRepaintBoundary extends RenderRepaintBoundary {
         if (imageHeight >= maxHeight * pixelRatio) {
           break;
         }
-
         double lastImageHeight = 0;
 
-        if (canScroll(scrollController)) {
+        if (_canScroll(scrollController)) {
           double scrollHeight = scrollController.offset + sHeight / 10;
 
           if (scrollHeight > scrollController.position.maxScrollExtent) {
-            lastImageHeight = scrollController.position.maxScrollExtent + sHeight - sHeight * i;
+            lastImageHeight = scrollController.position.maxScrollExtent +
+                sHeight -
+                sHeight * i;
 
             scrollController.jumpTo(scrollController.position.maxScrollExtent);
-            await Future.delayed(const Duration(milliseconds: 25));
+            await Future.delayed(const Duration(milliseconds: 16));
 
             Uint8List lastImage = await _screenshot(pixelRatio);
 
             imageParams.add(ImageParam(
               image: lastImage,
-              offset: Offset(0, imageHeight - ((size.height - lastImageHeight) * pixelRatio)),
+              offset: Offset(0,
+                  imageHeight - ((size.height - lastImageHeight) * pixelRatio)),
               size: size * pixelRatio,
             ));
 
             imageHeight += lastImageHeight * pixelRatio;
           } else if (scrollHeight > sHeight * i) {
             scrollController.jumpTo(sHeight * i);
-            await Future.delayed(const Duration(milliseconds: 25));
+            await Future.delayed(const Duration(milliseconds: 16));
             i++;
 
             Uint8List image = await _screenshot(pixelRatio);
@@ -115,22 +138,53 @@ class WidgetShotRenderRepaintBoundary extends RenderRepaintBoundary {
             imageHeight += sHeight * pixelRatio;
           } else {
             scrollController.jumpTo(scrollHeight);
-            await Future.delayed(const Duration(milliseconds: 25));
+            await Future.delayed(const Duration(milliseconds: 16));
           }
         } else {
           break;
         }
       }
+    }
 
-      final mergeParam = MergeParam(
+    extraImage
+        .where((element) => element.offset == const Offset(-2, -2))
+        .toList(growable: false)
+        .forEach((element) {
+      imageParams.add(ImageParam(
+        image: element.image,
+        offset: Offset(0, imageHeight),
+        size: element.size,
+      ));
+      imageHeight += element.size.height;
+    });
+
+    extraImage
+        .where((element) => (element.offset != const Offset(-1, -1) &&
+            element.offset != const Offset(-2, -2)))
+        .toList(growable: false)
+        .forEach((element) {
+      imageParams.add(ImageParam(
+        image: element.image,
+        offset: element.offset,
+        size: element.size,
+      ));
+    });
+
+    final mergeParam = MergeParam(
         color: backgroundColor,
         size: Size(size.width * pixelRatio, imageHeight),
         format: format,
         quality: quality,
-        imageParams: imageParams,
-      );
+        imageParams: imageParams);
 
-      resultImage = await ImageMerger.merge(mergeParam);
+    resultImage = await _merge(canScroll, mergeParam);
+
+    return resultImage;
+  }
+
+  Future<Uint8List?> _merge(bool canScroll, MergeParam mergeParam) async {
+    if (canScroll) {
+      return ImageMerger.merge(mergeParam);
     } else {
       Paint paint = Paint();
       paint
@@ -138,26 +192,35 @@ class WidgetShotRenderRepaintBoundary extends RenderRepaintBoundary {
         ..color = Colors.white; // 画笔颜色
       PictureRecorder pictureRecorder = PictureRecorder();
       Canvas canvas = Canvas(pictureRecorder);
-      if (backgroundColor != null) {
-        canvas.drawColor(backgroundColor, BlendMode.color);
+      if (mergeParam.color != null) {
+        canvas.drawColor(mergeParam.color!, BlendMode.color);
         canvas.save();
       }
 
-      ui.Image tempImage = await toImage(pixelRatio: pixelRatio);
-      canvas.drawImage(tempImage, Offset.zero, paint);
+      for (var element in mergeParam.imageParams) {
+        ui.Image img = await decodeImageFromList(element.image);
+
+        canvas.drawImage(img, element.offset, paint);
+      }
+
       Picture picture = pictureRecorder.endRecording();
 
-      ui.Image rImage = await picture.toImage(tempImage.width, tempImage.height);
-      ByteData? byteData = await rImage.toByteData(format: ui.ImageByteFormat.png);
-      resultImage = byteData!.buffer.asUint8List();
+      ui.Image rImage = await picture.toImage(
+          mergeParam.size.width.ceil(), mergeParam.size.height.ceil());
+      ByteData? byteData =
+          await rImage.toByteData(format: ui.ImageByteFormat.png);
+      return byteData!.buffer.asUint8List();
     }
-    return resultImage;
   }
 
-  bool canScroll(ScrollController scrollController) {
+  bool _canScroll(ScrollController? scrollController) {
+    if (scrollController == null) {
+      return false;
+    }
     double maxScrollExtent = scrollController.position.maxScrollExtent;
     double offset = scrollController.offset;
-    return !nearEqual(maxScrollExtent, offset, scrollController.position.physics.tolerance.distance);
+    return !nearEqual(maxScrollExtent, offset,
+        scrollController.position.physics.tolerance.distance);
   }
 
   Future<Uint8List> _screenshot(double pixelRatio) async {

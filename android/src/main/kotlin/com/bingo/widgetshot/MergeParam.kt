@@ -5,7 +5,7 @@ const val FormatJPEG=1
 
 
 data class MergeParam(
-    val color: Int,
+    val color: Int?,
     val width: Double,
     val height: Double,
     val format:Int,
