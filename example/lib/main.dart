@@ -33,7 +33,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  GlobalKey _shotHeaderKey = GlobalKey();
   GlobalKey _shotKey = GlobalKey();
+  GlobalKey _shotEndKey = GlobalKey();
+
   ScrollController _scrollController = ScrollController();
 
   @override
@@ -80,30 +83,86 @@ class _MyHomePageState extends State<MyHomePage> {
               ))
         ],
       ),
-      body: WidgetShot(
-        key: _shotKey,
-        child: ListView.separated(
-            controller: _scrollController,
-            itemBuilder: (context, index) {
-              return Container(
-                // color: Color.fromARGB(
-                //     Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), Random().nextInt(255)),
-                height: 160,
-                child: Center(
-                  child: Text(
-                    "测试文案测试文案测试文案测试文案 ${index}",
-                    style: const TextStyle(fontSize: 32),
-                  ),
+      body: Column(
+        children: [
+          WidgetShot(
+            key: _shotHeaderKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: const [
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text("TestHeader"),
                 ),
-              );
-            },
-            separatorBuilder: (context, index) {
-              return const Divider(
-                height: 1,
-                color: Colors.grey,
-              );
-            },
-            itemCount: 100),
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text("TestHeader"),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text("TestHeader"),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text("TestHeader"),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: WidgetShot(
+              key: _shotKey,
+              child: ListView.separated(
+                  controller: _scrollController,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      // color: Color.fromARGB(
+                      //     Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), Random().nextInt(255)),
+                      height: 160,
+                      child: Center(
+                        child: Text(
+                          "测试文案测试文案测试文案测试文案 ${index}",
+                          style: const TextStyle(fontSize: 32),
+                        ),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return const Divider(
+                      height: 1,
+                      color: Colors.grey,
+                    );
+                  },
+                  itemCount: 100),
+            ),
+          ),
+          WidgetShot(
+            key: _shotHeaderKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: const [
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text("TestHeader"),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text("TestHeader"),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text("TestHeader"),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text("TestHeader"),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

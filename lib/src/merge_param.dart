@@ -2,30 +2,25 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 
+import 'widget_screenshot.dart';
 
 class MergeParam {
-  static const int formatPng = 0;
-  static const int formatJPEG = 1;
-
-  final Color color;
+  final Color? color;
   final Size size;
-  final int format;
+  final ShotFormat format;
   final int quality;
   final List<ImageParam> imageParams;
 
-  MergeParam(
-      {this.color = Colors.white,
-      required this.size,
-      this.format = formatJPEG,
-      this.quality = 90,
-      required this.imageParams});
+  MergeParam({this.color, required this.size, required this.format, required this.quality, required this.imageParams});
 
   Map<String, dynamic> toJson() {
     var map = <String, dynamic>{};
-    map["color"] =[color.alpha,color.red,color.green,color.blue];
+    if (color != null) {
+      map["color"] = [color!.alpha, color!.red, color!.green, color!.blue];
+    }
     map["width"] = size.width;
     map["height"] = size.height;
-    map["format"] = format;
+    map["format"] = format == ShotFormat.png ? 0 : 1;
     map["quality"] = quality;
     map["imageParams"] = imageParams.map((e) => e.toJson()).toList();
     return map;
@@ -35,18 +30,21 @@ class MergeParam {
 class ImageParam {
   final Uint8List image;
   final Offset offset;
-  final Size size;
+  final Rect rect;
 
-  ImageParam({required this.image, required this.offset,required this.size});
+  ImageParam({required this.image, required this.offset, required this.rect});
+
+  ImageParam.start(Uint8List image, Rect rect) : this(image: image, offset: const Offset(-1, -1), rect: rect);
+
+  ImageParam.end(Uint8List image, Rect rect) : this(image: image, offset: const Offset(-2, -2), rect: rect);
+
 
   Map<String, dynamic> toJson() {
     var map = <String, dynamic>{};
     map["image"] = image;
     map["dx"] = offset.dx;
     map["dy"] = offset.dy;
-    map["width"] = size.width;
-    map["height"] = size.height;
+    map["rect"] = [rect.left, rect.top, rect.right, rect.bottom];
     return map;
   }
 }
-
