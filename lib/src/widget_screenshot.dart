@@ -57,7 +57,6 @@ class WidgetShotRenderRepaintBoundary extends RenderRepaintBoundary {
     extraImage
         .where((element) => element.offset == const Offset(-1, -1))
         .toList(growable: false)
-        .reversed
         .forEach((element) {
       imageParams.add(ImageParam(
         image: element.image,

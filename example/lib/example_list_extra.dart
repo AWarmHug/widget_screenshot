@@ -16,6 +16,9 @@ class ExampleListExtraPage extends StatefulWidget {
 
 class _ExampleListExtraPageState extends State<ExampleListExtraPage> {
   GlobalKey _shotHeaderKey = GlobalKey();
+
+  GlobalKey _shotHeaderKey2 = GlobalKey();
+
   GlobalKey _shotKey = GlobalKey();
   GlobalKey _shotFooterKey = GlobalKey();
 
@@ -35,6 +38,12 @@ class _ExampleListExtraPageState extends State<ExampleListExtraPage> {
                     _shotHeaderKey.currentContext!.findRenderObject()
                         as WidgetShotRenderRepaintBoundary;
                 var headerImage = await headerBoundary.screenshot(
+                    format: ShotFormat.png, pixelRatio: 1);
+
+                WidgetShotRenderRepaintBoundary headerBoundary2 =
+                _shotHeaderKey2.currentContext!.findRenderObject()
+                as WidgetShotRenderRepaintBoundary;
+                var headerImage2 = await headerBoundary2.screenshot(
                     format: ShotFormat.png, pixelRatio: 1);
 
                 if(context.mounted) {
@@ -58,6 +67,10 @@ class _ExampleListExtraPageState extends State<ExampleListExtraPage> {
                             ImageParam.start(
                                 headerImage,
                                 _shotHeaderKey.currentContext!.size!),
+                          if (headerImage2 != null)
+                            ImageParam.start(
+                              headerImage2,
+                              _shotHeaderKey2.currentContext!.size!),
                           if (footerImage != null)
                             ImageParam.end(
                                 footerImage,
@@ -121,6 +134,22 @@ class _ExampleListExtraPageState extends State<ExampleListExtraPage> {
                   Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Text("TestHeader"),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          WidgetShot(
+            key: _shotHeaderKey2,
+            child: Container(
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text("TestHeader2"),
                   ),
                 ],
               ),
