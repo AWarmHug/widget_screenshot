@@ -57,9 +57,9 @@ var resultImage = await repaintBoundary.screenshot(scrollController: _scrollCont
 
 <div align="center">
 <img src="https://raw.githubusercontent.com/AWarmHug/widget_screenshot/main/display/shot.webp" width="20%" align="top">
-
+shoting->
 <img src="https://raw.githubusercontent.com/AWarmHug/widget_screenshot/main/display/shoting.gif" width="20%" align="top">
-
+result->
 <img src="https://raw.githubusercontent.com/AWarmHug/widget_screenshot/main/display/shoted.webp" width="20%" align="top">
 
 </div>

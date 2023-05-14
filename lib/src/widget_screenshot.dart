@@ -17,14 +17,15 @@ class WidgetShot extends SingleChildRenderObjectWidget {
 
   @override
   RenderObject createRenderObject(BuildContext context) =>
-      WidgetShotRenderRepaintBoundary();
+      WidgetShotRenderRepaintBoundary(context);
 }
 
 class WidgetShotRenderRepaintBoundary extends RenderRepaintBoundary {
-  WidgetShotRenderRepaintBoundary();
+  BuildContext context;
+  WidgetShotRenderRepaintBoundary(this.context);
 
   /// [scrollController] is child's scrollController, if child is [ScrollView]
-  /// The resultImage's [pixelRatio] default [ window.devicePixelRatio]
+  /// The resultImage's [pixelRatio] default [View.of(context).devicePixelRatio]
   /// some child has no background, [backgroundColor] to set backgroundColor default [Colors.white
   /// set format by [format] support png or jpeg
   /// set [quality] 0~100, if [format] is png, [quality] is useless
@@ -38,7 +39,7 @@ class WidgetShotRenderRepaintBoundary extends RenderRepaintBoundary {
     ShotFormat format = ShotFormat.png,
     int quality = 100,
   }) async {
-    pixelRatio ??= window.devicePixelRatio;
+    pixelRatio ??= View.of(context).devicePixelRatio;
     if (quality > 100) {
       quality = 100;
     }
@@ -219,7 +220,7 @@ class WidgetShotRenderRepaintBoundary extends RenderRepaintBoundary {
     double maxScrollExtent = scrollController.position.maxScrollExtent;
     double offset = scrollController.offset;
     return !nearEqual(maxScrollExtent, offset,
-        scrollController.position.physics.tolerance.distance);
+        scrollController.position.physics.toleranceFor(scrollController.position).distance);
   }
 
   Future<Uint8List> _screenshot(double pixelRatio) async {

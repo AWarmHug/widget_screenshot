@@ -14,7 +14,7 @@ class ExampleListExtraPage extends StatefulWidget {
   State<ExampleListExtraPage> createState() => _ExampleListExtraPageState();
 }
 
-class _ExampleListExtraPageState extends State<ExampleListExtraPage> {
+class _ExampleListExtraPageState extends State<ExampleListExtraPage> with SingleTickerProviderStateMixin{
   GlobalKey _shotHeaderKey = GlobalKey();
 
   GlobalKey _shotHeaderKey2 = GlobalKey();
@@ -37,56 +37,49 @@ class _ExampleListExtraPageState extends State<ExampleListExtraPage> {
                 WidgetShotRenderRepaintBoundary headerBoundary =
                     _shotHeaderKey.currentContext!.findRenderObject()
                         as WidgetShotRenderRepaintBoundary;
-                var headerImage = await headerBoundary.screenshot(
-                    format: ShotFormat.png, pixelRatio: 1);
+                var headerImage =
+                    await headerBoundary.screenshot(format: ShotFormat.png);
 
                 WidgetShotRenderRepaintBoundary headerBoundary2 =
-                _shotHeaderKey2.currentContext!.findRenderObject()
-                as WidgetShotRenderRepaintBoundary;
-                var headerImage2 = await headerBoundary2.screenshot(
-                    format: ShotFormat.png, pixelRatio: 1);
+                    _shotHeaderKey2.currentContext!.findRenderObject()
+                        as WidgetShotRenderRepaintBoundary;
+                var headerImage2 =
+                    await headerBoundary2.screenshot(format: ShotFormat.png);
 
-                if(context.mounted) {
+                if (context.mounted) {
                   WidgetShotRenderRepaintBoundary footerBoundary =
-                  _shotFooterKey.currentContext!.findRenderObject()
+                      _shotFooterKey.currentContext!.findRenderObject()
                           as WidgetShotRenderRepaintBoundary;
-                  var footerImage = await footerBoundary.screenshot(
-                      format: ShotFormat.png, pixelRatio: 1);
+                  var footerImage =
+                      await footerBoundary.screenshot(format: ShotFormat.png);
 
                   var watermark = await loadAssetImage("images/watermark.png");
 
                   if (context.mounted) {
-
                     WidgetShotRenderRepaintBoundary repaintBoundary =
-                    _shotKey.currentContext!.findRenderObject()
-                    as WidgetShotRenderRepaintBoundary;
+                        _shotKey.currentContext!.findRenderObject()
+                            as WidgetShotRenderRepaintBoundary;
                     var resultImage = await repaintBoundary.screenshot(
                         scrollController: _scrollController,
                         extraImage: [
                           if (headerImage != null)
-                            ImageParam.start(
-                                headerImage,
-                                _shotHeaderKey.currentContext!.size!),
+                            ImageParam.start(headerImage,
+                                _shotHeaderKey.currentContext!.size!*View.of(context).devicePixelRatio),
                           if (headerImage2 != null)
-                            ImageParam.start(
-                              headerImage2,
-                              _shotHeaderKey2.currentContext!.size!),
+                            ImageParam.start(headerImage2,
+                                _shotHeaderKey2.currentContext!.size!*View.of(context).devicePixelRatio),
                           if (footerImage != null)
-                            ImageParam.end(
-                                footerImage,
-                                _shotFooterKey.currentContext!.size!),
-                          ImageParam(image: watermark, offset: const Offset(100, 100), size: const Size(200, 80))
+                            ImageParam.end(footerImage,
+                                _shotFooterKey.currentContext!.size!*View.of(context).devicePixelRatio),
+                          ImageParam(
+                              image: watermark,
+                              offset: const Offset(100, 100),
+                              size: const Size(200, 80))
                         ],
                         format: ShotFormat.png,
-                        backgroundColor: Colors.white,
-                        pixelRatio: 1);
+                        backgroundColor: Colors.black);
 
                     try {
-                      // Map<dynamic, dynamic> result =
-                      //     await ImageGallerySaver.saveImage(resultImage!);
-                      //
-                      // debugPrint("result = ${result}");
-
                       /// 存储的文件的路径
                       String path = (await getTemporaryDirectory()).path;
                       path += '/${DateTime.now().toString()}.png';
@@ -95,9 +88,10 @@ class _ExampleListExtraPageState extends State<ExampleListExtraPage> {
                         file.createSync();
                       }
                       await file.writeAsBytes(resultImage!);
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text("save success!\npath = ${file.path}")));
                       debugPrint("result = ${file.path}");
                     } catch (error) {
-                      /// flutter保存图片到App内存文件夹出错
                       debugPrint("error = ${error}");
                     }
                   }
@@ -114,19 +108,12 @@ class _ExampleListExtraPageState extends State<ExampleListExtraPage> {
           WidgetShot(
             key: _shotHeaderKey,
             child: Container(
+              color: Colors.white,
               width: double.infinity,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: const [
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text("TestHeader"),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text("TestHeader"),
-                  ),
+                children: [
                   Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Text("TestHeader"),
@@ -142,14 +129,16 @@ class _ExampleListExtraPageState extends State<ExampleListExtraPage> {
           WidgetShot(
             key: _shotHeaderKey2,
             child: Container(
+              color: Colors.black,
+              padding: const EdgeInsets.all(8.0),
               width: double.infinity,
-              child: Column(
+              child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: const [
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text("TestHeader2"),
+                children: [
+                  Text(
+                    "TestHeader2",
+                    style: TextStyle(color: Colors.white),
                   ),
                 ],
               ),
@@ -162,14 +151,34 @@ class _ExampleListExtraPageState extends State<ExampleListExtraPage> {
                   controller: _scrollController,
                   itemBuilder: (context, index) {
                     return Container(
-                      // color: Color.fromARGB(
-                      //     Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), Random().nextInt(255)),
-                      height: 160,
-                      child: Center(
-                        child: Text(
-                          "测试文案测试文案测试文案测试文案 ${index}",
-                          style: const TextStyle(fontSize: 32),
-                        ),
+                      padding:
+                          const EdgeInsets.only(top: 12, right: 12, bottom: 12),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const FlutterLogo(
+                            size: 100,
+                          ),
+                          Expanded(
+                              child: Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(4),
+                              shape: BoxShape.rectangle,
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.white,
+                                  offset: Offset(0, 0),
+                                  blurRadius: 14,
+                                  spreadRadius: 0,
+                                ),
+                              ],
+                            ),
+                            child: const Text(
+                                "The Container widget lets you create a rectangular visual element. A container can be decorated with a BoxDecoration, such as a background, a border, or a shadow. A Container can also have margins, padding, and constraints applied to its size."),
+                          ))
+                        ],
                       ),
                     );
                   },
@@ -179,25 +188,18 @@ class _ExampleListExtraPageState extends State<ExampleListExtraPage> {
                       color: Colors.grey,
                     );
                   },
-                  itemCount: 6),
+                  itemCount: 100),
             ),
           ),
           WidgetShot(
             key: _shotFooterKey,
             child: Container(
+              color: Colors.white,
               width: double.infinity,
-              child: Column(
+              child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: const [
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text("TestFooter"),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text("TestFooter"),
-                  ),
+                children: [
                   Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Text("TestFooter"),
@@ -214,7 +216,6 @@ class _ExampleListExtraPageState extends State<ExampleListExtraPage> {
       ),
     );
   }
-
 
   Future<Uint8List> loadAssetImage(String filePath) async {
     final ByteData data = await rootBundle.load(filePath);

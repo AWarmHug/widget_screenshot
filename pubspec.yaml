@@ -1,11 +1,11 @@
 name: widget_screenshot
-description: Screenshot for widget,support long screenshot like ListView
-version: 0.0.6
+description: Screenshot for widget,support long screenshot like ListView, support backgroundColor, format (png, jpeg), quality (0~100), merge extraImages (like header, footer or watermark)
+version: 0.0.7
 homepage: https://github.com/AWarmHug/widget_screenshot
 repository: https://github.com/AWarmHug/widget_screenshot
 
 environment:
-  sdk: '>=2.17.0 <3.0.0'
+  sdk: '>=2.17.0 <4.0.0'
   flutter: ">=2.5.0"
 
 dependencies:
