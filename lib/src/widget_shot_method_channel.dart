@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -11,8 +13,9 @@ class MethodChannelWidgetShot extends WidgetShotPlatform {
   final methodChannel = const MethodChannel('widget_shot');
 
   @override
-  Future<Uint8List?> mergeToMemory(MergeParam mergeParam) async{
-    final image = await methodChannel.invokeMethod<Uint8List>("merge",mergeParam.toJson());
+  Future<Uint8List?> mergeToMemory(MergeParam mergeParam) async {
+    final image = await methodChannel.invokeMethod<Uint8List>(
+        "merge", mergeParam.toJson());
     return image;
   }
 }

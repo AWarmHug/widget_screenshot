@@ -25,3 +25,7 @@
 ## 0.0.7
 
 * 1.3.10.0,2.update example
+
+## 0.0.8
+
+* reset flutter version

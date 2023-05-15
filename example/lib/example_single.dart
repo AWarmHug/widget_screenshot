@@ -27,7 +27,6 @@ class _ExampleSinglePageState extends State<ExampleSinglePage> {
         actions: [
           TextButton(
               onPressed: () async {
-                if (context.mounted) {
                   WidgetShotRenderRepaintBoundary repaintBoundary =
                       _shotKey.currentContext!.findRenderObject()
                           as WidgetShotRenderRepaintBoundary;
@@ -50,7 +49,6 @@ class _ExampleSinglePageState extends State<ExampleSinglePage> {
                     /// flutter保存图片到App内存文件夹出错
                     debugPrint("error = ${error}");
                   }
-                }
               },
               child: const Text(
                 "Shot",

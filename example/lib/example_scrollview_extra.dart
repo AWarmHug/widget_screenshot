@@ -35,14 +35,12 @@ class _ExampleScrollViewExtraPageState extends State<ExampleScrollViewExtraPage>
                 var headerImage = await headerBoundary.screenshot(
                     format: ShotFormat.png, pixelRatio: 1);
 
-                if(context.mounted) {
                   WidgetShotRenderRepaintBoundary footerBoundary =
                   _shotFooterKey.currentContext!.findRenderObject()
                           as WidgetShotRenderRepaintBoundary;
                   var footerImage = await footerBoundary.screenshot(
                       format: ShotFormat.png, pixelRatio: 1);
 
-                  if (context.mounted) {
                     WidgetShotRenderRepaintBoundary repaintBoundary =
                     _shotKey.currentContext!.findRenderObject()
                     as WidgetShotRenderRepaintBoundary;
@@ -81,8 +79,6 @@ class _ExampleScrollViewExtraPageState extends State<ExampleScrollViewExtraPage>
                       /// flutter保存图片到App内存文件夹出错
                       debugPrint("error = ${error}");
                     }
-                  }
-                }
               },
               child: const Text(
                 "Shot",

@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
+import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +16,7 @@ class ExampleListExtraPage extends StatefulWidget {
   State<ExampleListExtraPage> createState() => _ExampleListExtraPageState();
 }
 
-class _ExampleListExtraPageState extends State<ExampleListExtraPage> with SingleTickerProviderStateMixin{
+class _ExampleListExtraPageState extends State<ExampleListExtraPage> with SingleTickerProviderStateMixin {
   GlobalKey _shotHeaderKey = GlobalKey();
 
   GlobalKey _shotHeaderKey2 = GlobalKey();
@@ -35,46 +37,33 @@ class _ExampleListExtraPageState extends State<ExampleListExtraPage> with Single
           TextButton(
               onPressed: () async {
                 WidgetShotRenderRepaintBoundary headerBoundary =
-                    _shotHeaderKey.currentContext!.findRenderObject()
-                        as WidgetShotRenderRepaintBoundary;
-                var headerImage =
-                    await headerBoundary.screenshot(format: ShotFormat.png);
+                    _shotHeaderKey.currentContext!.findRenderObject() as WidgetShotRenderRepaintBoundary;
+                var headerImage = await headerBoundary.screenshot(format: ShotFormat.png);
 
                 WidgetShotRenderRepaintBoundary headerBoundary2 =
-                    _shotHeaderKey2.currentContext!.findRenderObject()
-                        as WidgetShotRenderRepaintBoundary;
-                var headerImage2 =
-                    await headerBoundary2.screenshot(format: ShotFormat.png);
+                    _shotHeaderKey2.currentContext!.findRenderObject() as WidgetShotRenderRepaintBoundary;
+                var headerImage2 = await headerBoundary2.screenshot(format: ShotFormat.png);
 
-                if (context.mounted) {
                   WidgetShotRenderRepaintBoundary footerBoundary =
-                      _shotFooterKey.currentContext!.findRenderObject()
-                          as WidgetShotRenderRepaintBoundary;
-                  var footerImage =
-                      await footerBoundary.screenshot(format: ShotFormat.png);
+                      _shotFooterKey.currentContext!.findRenderObject() as WidgetShotRenderRepaintBoundary;
+                  var footerImage = await footerBoundary.screenshot(format: ShotFormat.png);
 
                   var watermark = await loadAssetImage("images/watermark.png");
 
-                  if (context.mounted) {
                     WidgetShotRenderRepaintBoundary repaintBoundary =
-                        _shotKey.currentContext!.findRenderObject()
-                            as WidgetShotRenderRepaintBoundary;
+                        _shotKey.currentContext!.findRenderObject() as WidgetShotRenderRepaintBoundary;
                     var resultImage = await repaintBoundary.screenshot(
                         scrollController: _scrollController,
                         extraImage: [
                           if (headerImage != null)
-                            ImageParam.start(headerImage,
-                                _shotHeaderKey.currentContext!.size!*View.of(context).devicePixelRatio),
+                            ImageParam.start(
+                                headerImage, _shotHeaderKey.currentContext!.size! * window.devicePixelRatio),
                           if (headerImage2 != null)
-                            ImageParam.start(headerImage2,
-                                _shotHeaderKey2.currentContext!.size!*View.of(context).devicePixelRatio),
+                            ImageParam.start(
+                                headerImage2, _shotHeaderKey2.currentContext!.size! * window.devicePixelRatio),
                           if (footerImage != null)
-                            ImageParam.end(footerImage,
-                                _shotFooterKey.currentContext!.size!*View.of(context).devicePixelRatio),
-                          ImageParam(
-                              image: watermark,
-                              offset: const Offset(100, 100),
-                              size: const Size(200, 80))
+                            ImageParam.end(footerImage, _shotFooterKey.currentContext!.size! * window.devicePixelRatio),
+                          ImageParam(image: watermark, offset: const Offset(100, 100), size: const Size(200, 80))
                         ],
                         format: ShotFormat.png,
                         backgroundColor: Colors.black);
@@ -88,14 +77,12 @@ class _ExampleListExtraPageState extends State<ExampleListExtraPage> with Single
                         file.createSync();
                       }
                       await file.writeAsBytes(resultImage!);
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text("save success!\npath = ${file.path}")));
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text("save success!\npath = ${file.path}")));
                       debugPrint("result = ${file.path}");
                     } catch (error) {
                       debugPrint("error = ${error}");
                     }
-                  }
-                }
               },
               child: const Text(
                 "Shot",
@@ -132,7 +119,7 @@ class _ExampleListExtraPageState extends State<ExampleListExtraPage> with Single
               color: Colors.black,
               padding: const EdgeInsets.all(8.0),
               width: double.infinity,
-              child: const Column(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -151,8 +138,7 @@ class _ExampleListExtraPageState extends State<ExampleListExtraPage> with Single
                   controller: _scrollController,
                   itemBuilder: (context, index) {
                     return Container(
-                      padding:
-                          const EdgeInsets.only(top: 12, right: 12, bottom: 12),
+                      padding: const EdgeInsets.only(top: 12, right: 12, bottom: 12),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -196,20 +182,22 @@ class _ExampleListExtraPageState extends State<ExampleListExtraPage> with Single
             child: Container(
               color: Colors.white,
               width: double.infinity,
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text("TestFooter"),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text("TestFooter"),
-                  ),
-                ],
-              ),
+              child: Builder(builder: (context) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text("TestFooter"),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text("TestFooter"),
+                    ),
+                  ],
+                );
+              }),
             ),
           ),
         ],

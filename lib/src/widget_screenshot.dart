@@ -22,6 +22,7 @@ class WidgetShot extends SingleChildRenderObjectWidget {
 
 class WidgetShotRenderRepaintBoundary extends RenderRepaintBoundary {
   BuildContext context;
+
   WidgetShotRenderRepaintBoundary(this.context);
 
   /// [scrollController] is child's scrollController, if child is [ScrollView]
@@ -39,7 +40,7 @@ class WidgetShotRenderRepaintBoundary extends RenderRepaintBoundary {
     ShotFormat format = ShotFormat.png,
     int quality = 100,
   }) async {
-    pixelRatio ??= View.of(context).devicePixelRatio;
+    pixelRatio ??= window.devicePixelRatio;
     if (quality > 100) {
       quality = 100;
     }
@@ -220,7 +221,7 @@ class WidgetShotRenderRepaintBoundary extends RenderRepaintBoundary {
     double maxScrollExtent = scrollController.position.maxScrollExtent;
     double offset = scrollController.offset;
     return !nearEqual(maxScrollExtent, offset,
-        scrollController.position.physics.toleranceFor(scrollController.position).distance);
+        scrollController.position.physics.tolerance.distance);
   }
 
   Future<Uint8List> _screenshot(double pixelRatio) async {

@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -27,35 +26,32 @@ class _ExampleListPageState extends State<ExampleListPage> {
         actions: [
           TextButton(
               onPressed: () async {
-                if (context.mounted) {
-                  WidgetShotRenderRepaintBoundary repaintBoundary =
-                      _shotKey.currentContext!.findRenderObject()
-                          as WidgetShotRenderRepaintBoundary;
-                  var resultImage = await repaintBoundary.screenshot(
-                      scrollController: _scrollController,
-                      backgroundColor: Colors.white,
-                      format: ShotFormat.png,
-                      pixelRatio: 1);
+                WidgetShotRenderRepaintBoundary repaintBoundary =
+                    _shotKey.currentContext!.findRenderObject() as WidgetShotRenderRepaintBoundary;
+                var resultImage = await repaintBoundary.screenshot(
+                    scrollController: _scrollController,
+                    backgroundColor: Colors.white,
+                    format: ShotFormat.png,
+                    pixelRatio: 1);
 
-                  try {
-                    // Map<dynamic, dynamic> result =
-                    //     await ImageGallerySaver.saveImage(resultImage!);
-                    //
-                    // debugPrint("result = ${result}");
+                try {
+                  // Map<dynamic, dynamic> result =
+                  //     await ImageGallerySaver.saveImage(resultImage!);
+                  //
+                  // debugPrint("result = ${result}");
 
-                    /// 存储的文件的路径
-                    String path = (await getTemporaryDirectory()).path;
-                    path += '/${DateTime.now().toString()}.png';
-                    File file = File(path);
-                    if (!file.existsSync()) {
-                      file.createSync();
-                    }
-                    await file.writeAsBytes(resultImage!);
-                    debugPrint("result = ${file.path}");
-                  } catch (error) {
-                    /// flutter保存图片到App内存文件夹出错
-                    debugPrint("error = ${error}");
+                  /// 存储的文件的路径
+                  String path = (await getTemporaryDirectory()).path;
+                  path += '/${DateTime.now().toString()}.png';
+                  File file = File(path);
+                  if (!file.existsSync()) {
+                    file.createSync();
                   }
+                  await file.writeAsBytes(resultImage!);
+                  debugPrint("result = ${file.path}");
+                } catch (error) {
+                  /// flutter保存图片到App内存文件夹出错
+                  debugPrint("error = ${error}");
                 }
               },
               child: const Text(
