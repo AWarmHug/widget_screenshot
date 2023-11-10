@@ -1,6 +1,6 @@
 name: widget_screenshot
 description: Screenshot for widget,support long screenshot like ListView, support backgroundColor, format (png, jpeg), quality (0~100), merge extraImages (like header, footer or watermark)
-version: 0.0.8
+version: 0.0.9
 homepage: https://github.com/AWarmHug/widget_screenshot
 repository: https://github.com/AWarmHug/widget_screenshot
 
